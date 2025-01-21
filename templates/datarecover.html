@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Recovery</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Data Recovery</h1>
+        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+
+        <!-- Directory Search -->
+        <div class="form-group">
+            <label for="dirPath">Enter Directory Path (Recycle Bin Path):</label>
+            <input type="text" id="dirPath" name="dirPath" placeholder="Enter directory path...">
+            <button id="scanBtn" onclick="scanDirectory()">Scan</button>
+        </div>
+
+        <!-- Scan Results -->
+        <div id="fileList" class="file-list">
+            <!-- Files will be displayed here after scanning -->
+        </div>
+
+        <!-- Recover Deleted Files -->
+        <div class="form-group">
+            <button id="recoverBtn" onclick="recoverData()" disabled>Recover Selected Files</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Scan directory function
+        function scanDirectory() {
+            const dirPath = document.getElementById('dirPath').value;
+            if (!dirPath) {
+                alert('Please enter a directory path.');
+                return;
+            }
+
+            // Call API to search directory
+            $.ajax({
+                url: '/scan_directory',
+                type: 'GET',
+                data: { path: dirPath },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert(response.message);
+                        // Display scanned files
+                        listFiles(dirPath, response.files);
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function() {
+                    alert('Error in scanning the directory.');
+                }
+            });
+        }
+
+        // List files after scanning
+        function listFiles(dirPath, files) {
+            const fileList = $('#fileList');
+            fileList.empty();
+
+            if (files.length > 0) {
+                files.forEach(file => {
+                    fileList.append(`<div><input type="checkbox" class="file-checkbox" data-file="${file}" /> ${file}</div>`);
+                });
+                document.getElementById('recoverBtn').disabled = false; // Enable recover button
+            } else {
+                alert('No deleted files found in this directory.');
+            }
+        }
+
+        // Recover deleted files
+        function recoverData() {
+            const dirPath = document.getElementById('dirPath').value;
+            const selectedFiles = [];
+
+            $('.file-checkbox:checked').each(function() {
+                selectedFiles.push($(this).data('file'));
+            });
+
+            if (selectedFiles.length === 0) {
+                alert('Please select files to recover.');
+                return;
+            }
+
+            $.ajax({
+                url: '/recover_data',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ path: dirPath, files: selectedFiles }),
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert(response.message);
+                        // Enable download links for recovered files
+                        response.files.forEach(file => {
+                            $('#fileList').append(`<div><a href="/download/${file}">${file}</a></div>`);
+                        });
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function() {
+                    alert('Error in recovering data.');
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

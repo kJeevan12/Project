@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Monitor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Network TCP Monitor</h1>
+        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+        <button id="refreshBtn">Refresh TCP Data</button>
+        <table id="tcpTable">
+            <thead>
+                <tr>
+                    <th>Local Address</th>
+                    <th>Remote Address</th>
+                    <th>Status</th>
+                    <th>PID</th>
+                    <th>Process Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- TCP data rows will be populated dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Fetch and populate TCP data
+        function fetchTCPData() {
+            $.ajax({
+                url: '/tcp_processes',
+                type: 'GET',
+                success: function(data) {
+                    const tableBody = $('#tcpTable tbody');
+                    tableBody.empty();
+
+                    if (data.length === 0) {
+                        tableBody.append('<tr><td colspan="5">No active TCP connections found.</td></tr>');
+                    } else {
+                        data.forEach(row => {
+                            tableBody.append(`
+                                <tr>
+                                    <td>${row.local_address}</td>
+                                    <td>${row.remote_address}</td>
+                                    <td>${row.status}</td>
+                                    <td>${row.pid}</td>
+                                    <td>${row.process_name}</td>
+                                </tr>
+                            `);
+                        });
+                    }
+                },
+                error: function() {
+                    alert('Error fetching TCP data.');
+                }
+            });
+        }
+
+        // Initialize and refresh button
+        $(document).ready(function() {
+            fetchTCPData();
+
+            $('#refreshBtn').click(function() {
+                fetchTCPData();
+            });
+        });
+    </script>
+</body>
+</html>
