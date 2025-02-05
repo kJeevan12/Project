@@ -1,0 +1,138 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eef2f7;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    background: #2b2f77;
+    color: white;
+    padding-top: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h1 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 30px;
+    color: #f4f4f9;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 10px 0;
+    padding: 0 20px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    display: block;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.sidebar ul li a:hover {
+    background-color: #4043b7;
+    transform: translateX(5px);
+}
+
+.logout {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+.logout a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background-color: #dc3545;
+    display: inline-block;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout a:hover {
+    background-color: #a71d2a;
+    transform: translateY(-3px);
+}
+
+.content {
+    margin-left: 250px;
+    padding: 40px;
+    background-color: #eef2f7;
+    border: 10px solid #007bff;
+    border-radius: 15px;
+    min-height: 100vh;
+}
+
+.content h2 {
+    font-size: 28px;
+    color: #007bff;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+}
+
+.content form {
+    margin-bottom: 20px;
+}
+
+.content label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.content input, .content select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.content button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.content button:hover {
+    background-color: #0056b3;
+}
+
+.content .response, .content .error {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.content .response {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.content .error {
+    background-color: #f8d7da;
+    color: #721c24;
+}

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Encryption</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #2196F3, #BBDEFB);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 650px;
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            border: 12px solid #007bff;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Inner Decorative Border */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            border: 5px dashed #004ba0;
+            border-radius: 15px;
+            pointer-events: none;
+        }
+
+        .container:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .container h2 {
+            margin-bottom: 20px;
+            color: #007bff;
+            font-size: 26px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-bottom: 4px solid #007bff;
+            display: inline-block;
+            padding-bottom: 8px;
+        }
+
+        /* Stylish File Input */
+        .file-input {
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+            width: 80%;
+        }
+
+        .file-input input {
+            font-size: 18px;
+            padding: 12px;
+            border: 3px dashed #007bff;
+            border-radius: 10px;
+            outline: none;
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+            background: #f1f8ff;
+        }
+
+        .file-input input:hover, .file-input input:focus {
+            border-color: #0056b3;
+            background-color: #e3f2fd;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+
+        /* Custom Submit Button */
+        .submit-btn {
+            background: linear-gradient(135deg, #007bff, #004ba0);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #0056b3, #003c8f);
+            transform: scale(1.08);
+            box-shadow: 0 8px 18px rgba(0, 0, 255, 0.4);
+        }
+
+        /* Floating Animation */
+        @keyframes floatEffect {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .container:hover {
+            animation: floatEffect 3s infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .container {
+                width: 90%;
+                padding: 30px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            .submit-btn {
+                font-size: 16px;
+                padding: 12px 20px;
+            }
+        }
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f4f7fc, #eef2f7); /* Gradient background */
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background: linear-gradient(145deg, #2b2f77, #334e87); /* Gradient for sidebar */
+            color: white;
+            padding-top: 20px;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            transition: width 0.3s ease, transform 0.3s ease; /* Smooth transition for sidebar */
+            z-index: 1000;
+        }
+
+        .sidebar h1 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 30px;
+            color: #f4f4f9;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 15px 0;
+            padding: 0 20px;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            display: block;
+            transition: background-color 0.3s ease, transform 0.2s ease, padding-left 0.2s ease, box-shadow 0.2s ease;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(10px);
+            padding-left: 30px;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Sidebar - Active Link */
+        .sidebar ul li a.active {
+            background-color: #007bff;
+            box-shadow: 0px 0px 10px rgba(0, 123, 255, 0.5);
+        }
+
+        /* Logout Button */
+        .logout {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logout a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background-color: #dc3545;
+            display: inline-block;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .logout a:hover {
+            background-color: #a71d2a;
+            transform: translateY(-3px);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Content Area */
+        .content {
+            margin-left: 250px;
+            padding: 40px;
+            background-color: #ffffff; /* Inner content background color */
+            border: 10px solid #4CAF50; /* Changed border color to green */
+            border-radius: 15px;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            background-clip: padding-box; /* Ensures the background doesn't overlap the border */
+        }
+
+        .content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(76, 175, 80, 0.05)); /* Gradient matching the border color */
+            z-index: -1;
+        }
+
+        .content h2 {
+            font-size: 28px;
+            color: #4CAF50; /* Changed heading color to match the border */
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #4CAF50; /* Matching border color */
+            padding-bottom: 5px;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .content p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.8;
+            letter-spacing: 0.5px;
+        }
+
+        /* Button Styling */
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: #4CAF50; /* Changed button color to match the border */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #45a049; /* Darker shade for hover */
+            transform: translateY(-2px);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Advanced Shadow for Content */
+        .content {
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .content {
+                margin-left: 200px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                text-align: center;
+                box-shadow: none;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 20px;
+                border: none;
+                box-shadow: none;
+            }
+
+            .logout {
+                position: static;
+                margin-top: 20px;
+            }
+
+            .sidebar ul li a {
+                padding: 12px 15px; /* Adjust padding for smaller screens */
+            }
+
+            .content h2 {
+                font-size: 24px;
+            }
+        }
+
+        /* Adding a subtle background animation */
+        @keyframes backgroundAnimation {
+            0% { background: #eef2f7; }
+            50% { background: #f9f9f9; }
+            100% { background: #eef2f7; }
+        }
+
+        body {
+            animation: backgroundAnimation 10s infinite ease-in-out;
+        }
+
+        /* Advanced Hover Effects */
+        .sidebar ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #4CAF50; /* Matching border color */
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar ul li a:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* Glow Effect on Active Link */
+        .sidebar ul li a.active {
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0px 0px 10px rgba(76, 175, 80, 0.5); /* Matching border color */
+            }
+            to {
+                box-shadow: 0px 0px 20px rgba(76, 175, 80, 0.8); /* Matching border color */
+            }
+        }
+
+        /* Floating Animation for Content */
+        .content {
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+    </style>
+    
+</head>
+<body>
+    <div class="sidebar">
+        <h1>Welcome, {{ username }}</h1>
+        <ul>
+            <li><a href="{{ url_for('auth.data_recovery') }}">Data Recovery</a></li>
+            <li><a href="{{ url_for('auth.network') }}">Network</a></li>
+            <li><a href="{{ url_for('auth.file_encryption') }}">File Encryption</a></li>
+            <li><a href="{{ url_for('auth.monitoring') }}">Monitoring</a></li>
+           
+        </ul>
+
+        <div class="logout">
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+    
+    
+
+    <div class="container">
+        <h2>File Encryption</h2>
+        
+        <form action="{{ url_for('auth.file_encryption') }}" method="POST" enctype="multipart/form-data">
+            <div class="file-input">
+                <input type="file" name="file" required>
+            </div>
+            <button type="submit" class="submit-btn">Encrypt File</button>
+        </form>
+    </div>
+</body>
+</html>

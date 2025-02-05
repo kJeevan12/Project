@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Monitoring</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e7e7e7;
+            border-radius: 5px;
+        }
+        .packet-list {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fafafa;
+            border-radius: 5px;
+        }
+        .packet-item {
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Network Monitoring</h1>
+</header>
+
+<div class="container">
+    <button class="btn" onclick="sendData()">Send Data</button>
+    <button class="btn" onclick="receiveData()">Receive Data</button>
+    
+    <div class="status" id="status">Status will be shown here</div>
+
+    <div class="packet-list">
+        <h3>Stored Packets</h3>
+        <ul id="packet-list">
+            <!-- List of stored packets will be shown here -->
+        </ul>
+    </div>
+</div>
+
+<script>
+    function sendData() {
+        fetch('/send_data')
+            .then(response => response.text())
+            .then(data => document.getElementById('status').innerText = data);
+    }
+
+    function receiveData() {
+        fetch('/receive_data')
+            .then(response => response.text())
+            .then(data => document.getElementById('status').innerText = data);
+    }
+
+    // Function to load stored packets and display them
+    function loadStoredPackets() {
+        fetch('/stored_packets')
+            .then(response => response.json())
+            .then(data => {
+                const packetList = document.getElementById('packet-list');
+                packetList.innerHTML = '';
+                data.forEach(packet => {
+                    const packetItem = document.createElement('li');
+                    packetItem.classList.add('packet-item');
+                    packetItem.innerText = `Sequence: ${packet.sequence_number}, Data: ${packet.data}`;
+                    packetList.appendChild(packetItem);
+                });
+            });
+    }
+
+    // Load stored packets every 5 seconds to keep the list updated
+    setInterval(loadStoredPackets, 5000);
+</script>
+
+</body>
+</html>
